@@ -1,6 +1,7 @@
 package com.example.todolist;
 
 import com.example.todolist.entity.Todo;
+import com.example.todolist.repository.TodoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class TodoControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @Autowired
+    TodoRepository todoRepository;
 
     @Test
     public void should_return_todos_when_get_all_todos() throws Exception {
@@ -45,7 +49,7 @@ public class TodoControllerTest {
 
     @Test
     public void should_return_todo_when_put_given_todo() throws Exception{
-        Todo todo = new Todo(6, "修改id为1的text", true);
+        Todo todo = todoRepository.save(new Todo(null, "用于删除的测试用例", true));
         ObjectMapper objectMapper = new ObjectMapper();
         String oldTodo = objectMapper.writeValueAsString(todo);
 
@@ -57,8 +61,12 @@ public class TodoControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.done").value(todo.getDone()));
     }
 
-//    @Test
-//    public void should_return_null_when_
+    @Test
+    public void should_return_null_when_delete_given_id() throws Exception{
+        Todo todo = todoRepository.save(new Todo(null, "用于删除的测试用例", true));
+        mockMvc.perform(MockMvcRequestBuilders.delete("/todos/{id}", todo.getId()))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
 
 
 
