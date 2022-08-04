@@ -1,32 +1,24 @@
 package com.example.todolist.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 /**
  * Created with IntelliJ IDEA.
+ *
  * @Author: Kendrick Chen
- * @Date: 2022/08/04/11:57 AM
+ * @Date: 2022/08/04/2:48 PM
  * @Mail: KENDRICK.CHEN@OOCL.COM
  */
-
-@Entity
-public class Todo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class TodoRequest {
     private Integer id;
     private String context;
     private Boolean done;
 
-    public Todo(Integer id, String text, Boolean done) {
+    public TodoRequest(Integer id, String text, Boolean done) {
         this.id = id;
         this.context = text;
         this.done = done;
     }
 
-    public Todo() {
+    public TodoRequest() {
     }
 
     public Integer getId() {
@@ -53,8 +45,4 @@ public class Todo {
         this.done = done;
     }
 
-    public void merge(Todo todo){
-        this.context=todo.context;
-        this.done=todo.done;
-    }
 }
