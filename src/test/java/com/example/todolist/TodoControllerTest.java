@@ -25,7 +25,7 @@ public class TodoControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/todos"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(todo.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].text").value(todo.getContext()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].context").value(todo.getContext()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].done").value(todo.getDone()));
     }
 
@@ -39,8 +39,27 @@ public class TodoControllerTest {
                         .contentType(MediaType.APPLICATION_JSON).content(newTodo))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.text").value(todo.getContext()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.context").value(todo.getContext()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.done").value(todo.getDone()));
     }
+
+    @Test
+    public void should_return_todo_when_put_given_todo() throws Exception{
+        Todo todo = new Todo(6, "修改id为1的text", true);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String oldTodo = objectMapper.writeValueAsString(todo);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/todos/{id}",todo.getId())
+                        .contentType(MediaType.APPLICATION_JSON).content(oldTodo))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.context").value(todo.getContext()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.done").value(todo.getDone()));
+    }
+
+//    @Test
+//    public void should_return_null_when_
+
+
 
 }
